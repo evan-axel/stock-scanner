@@ -1,0 +1,30 @@
+name: Stock Scanner
+on:
+  schedule:
+    - cron: '0 16 * * 1-5'  # Runs at 16:00 UTC on weekdays
+  workflow_dispatch:  # Allows manual triggers
+
+jobs:
+  scan-stocks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas yfinance twilio python-dotenv
+
+      - name: Run scanner
+        env:
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+          TWILIO_TO_NUMBER: ${{ secrets.TWILIO_TO_NUMBER }}
+        run: python stock_scanner.py
