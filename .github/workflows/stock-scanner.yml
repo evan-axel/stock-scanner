@@ -1,7 +1,7 @@
 name: Stock Scanner
 on:
   schedule:
-    - cron: '30 22 * * 1-5'  # Runs at 6:30 PM ET
+    - cron: '0 12 * * 1-5'  # Runs at 8:00 AM ET
   workflow_dispatch:
 
 jobs:
